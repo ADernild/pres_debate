@@ -1,8 +1,9 @@
 library(rtweet)
 
-key <- 'XXXXXXXXXXXXXXXXXXX'
+key <- 'XXXXXXXXXXXXXXXXXXX' 
 secret <- 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 
+# Connecting to Twitter api
 twitter_token <- create_token(
   app = "presidentialdebate",
   consumer_key = key,
@@ -34,23 +35,26 @@ twitter_grab <- function(word, n, since, until, file) {
   saveRDS(tweets, file = file)
 }
 
+# Creating pres_debate.rds from #presidentialdebate tweets
 twitter_grab(word = "presidentialdebate",
              n = 36000,
              since = "2020-09-30",
              until = "2020-10-01",
-             file = "pres_debate.rds")
+             file = "data/pres_debate.rds")
 
-twitter_grab(hash = "trump",
+# Creating trump.rds from #trump tweets
+twitter_grab(word = "trump",
              n = 18000,
              since = "2020-09-30",
              until = "2020-10-01",
-             file = "trump.rds")
+             file = "data/trump.rds")
 
-twitter_grab(hash = "biden",
+# Creating biden.rds from #biden tweets
+twitter_grab(word = "biden",
              n = 18000,
              since = "2020-09-30",
              until = "2020-10-01",
-             file = "biden.rds")
+             file = "data/biden.rds")
 
 
 

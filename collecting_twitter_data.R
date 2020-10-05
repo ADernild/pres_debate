@@ -1,4 +1,6 @@
 library(rtweet)
+library(dplyr)
+library(encryptr)
 
 key <- 'XXXXXXXXXXXXXXXXXXX' 
 secret <- 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
@@ -55,6 +57,8 @@ twitter_grab(word = "biden",
              since = "2020-09-30",
              until = "2020-10-01",
              file = "data/biden.rds")
+
+
 
 
 

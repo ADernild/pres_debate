@@ -1,9 +1,3 @@
-data/recent/7_day/pres_debate_7d.rds
-data/recent/7_day/trump_7d.rds
-data/recent/7_day/biden_7d.rds
-data/recent/24_hour/pres_debate.rds
-data/recent/24_hour/trump.rds
-data/recent/24_hour/biden.rds
 id_rsa
 id_rsa.pub
 .Rproj.user

@@ -1,6 +1,7 @@
 /data_backup
+/keys
 id_rsa
 id_rsa.pub
-.Rproj.user
 .Rhistory
 .RData
+.Rproj.user/

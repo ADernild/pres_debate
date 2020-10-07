@@ -8,7 +8,7 @@ clean_tweets <- function(x) {
     str_remove_all("^RT:? ") %>% #removes retweets
     str_remove_all("@[[:alnum:]]*") %>% #removes mentions
     str_remove_all("#[[:alnum:]]*") %>% #removes hashtags
-    str_remove_all("[[:punct:]]") %>% #removes punctuation
+    str_remove_all("(?![.,])[[:punct:]]") %>% #removes punctuation except . and ,
     str_replace_all("\\\n", " ") %>%
     str_to_lower() %>% 
     str_trim("both") 

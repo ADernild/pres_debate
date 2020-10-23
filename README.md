@@ -16,3 +16,4 @@ The data for this project has been collected using the Twitter API and rtweet-pa
     - /recent
     - /mixed
     - /popular
+  - /debate/ transcripts of the presidential debates 29th September and 22nd October in .csv format.

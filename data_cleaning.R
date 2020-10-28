@@ -24,7 +24,12 @@ voi <- c('user_id', 'status_id', 'created_at',
 # Looping through ref reading in datasets containing tweets and cleaning text variable
 for (row in 1:nrow(ref)) {
   df <- readRDS(ref$path[row]) %>%
+<<<<<<< HEAD
+    select(all_of(voi)) %>% 
+    distinct(status_id, .keep_all = TRUE)
+=======
     select(all_of(voi))
+>>>>>>> b3f9832d95b346c8384bb07752189ca5bc557e32
   df$text <- clean_tweets(df$text)
   saveRDS(df, ref$altpath[row])
 }

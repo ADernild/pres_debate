@@ -3,9 +3,6 @@ library(rtweet)
 key <- 'XXXXXXXXXXXXXXXXX'
 secret <- 'XXXXXXXXXXXXXXXXXX'
 
-key <- '0amKFy15EwmUXWpznIRhmS3fF'
-secret <- 'eu8wun4gNoOlSAr5VYVWT0gnRYHKT28U60fCZuqQZgmw70xiPY'
-
 # Connecting to Twitter api
 twitter_token <- create_token(
   app = "presidentialdebate",

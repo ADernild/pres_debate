@@ -1,10 +1,11 @@
 /data_backup
 /keys
 /data
-sentiment.R
+Sentiment Analysis.Rmd
 report.Rmd
 test.R
-Sentiment Analysis.Rmd
+sentiment.R
+report.Rmd
 .Rhistory
 .RData
 .Rproj.user/

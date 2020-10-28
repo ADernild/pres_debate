@@ -1,11 +1,12 @@
 /data_backup
 /keys
-/data/24_hour
-/data/7_day
+/data
 sentiment.R
+report.Rmd
+test.R
+Sentiment Analysis.Rmd
 .Rhistory
 .RData
 .Rproj.user/
 .gitattributes
 data_desc.odt
-

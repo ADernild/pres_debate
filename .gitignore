@@ -1,9 +1,7 @@
 /data_backup
 /keys
 /data
-Sentiment Analysis.Rmd
 report.Rmd
-test.R
 sentiment.R
 report.Rmd
 .Rhistory
@@ -11,3 +9,4 @@ report.Rmd
 .Rproj.user/
 .gitattributes
 data_desc.odt
+

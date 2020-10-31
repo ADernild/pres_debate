@@ -1,0 +1,134 @@
+---
+title: "Sentiment Analysis"
+author: "Alexander Dernild"
+date: "10/26/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Importing libraries & data
+
+```{r, importing data, message=FALSE}
+library(tidyverse)
+library(tidytext)
+library(scales)
+library(SnowballC)
+library(textstem)
+library(lexicon)
+
+# Reference set
+ref <- read.csv('twitter_data_clean.csv', stringsAsFactors = FALSE) # twitter data reference
+
+# Looping over reference set and loading data
+df_list <- lapply(ref$path[1:4], readRDS)
+df_list[5:6] <- lapply(ref$path[5:6], read.csv)
+names(df_list) <- ref$name
+```
+## Transforming data by unnesting tokens and removing stop words
+
+```{r, creating tibbles and removing stop_words}
+# Importing stop_words
+data(stop_words)
+
+tokenize_lemma <- function(df) {
+    tibble(time = df$created_at, text = df$text) %>% 
+    unnest_tokens(word, text) %>% 
+    mutate(word_stem = wordStem(word)) %>% 
+    mutate(word_lemma = lemmatize_words(word)) %>% 
+    anti_join(stop_words)
+}
+
+tokenize_lemma_speaker <- function(df, mod) {
+    tibble(speaker = factor(df$name, levels = c("President Donald J. Trump", "Vice President Joe Biden", mod), labels = c("Donald Trump", "Joe Biden", mod)), time = df$time, text = df$speech) %>% 
+    unnest_tokens(word, text) %>% 
+    mutate(word_stem = wordStem(word)) %>% 
+    mutate(word_lemma = lemmatize_words(word)) %>% 
+    anti_join(stop_words)
+}
+
+# Converting data.frames to tibble with selected data
+tidy_presdebate_first <- tokenize_lemma(df_list$presdebate_first)
+
+tidy_presdebate_first_w <- tokenize_lemma(df_list$presdebate_first_w)
+
+tidy_presdebate_final <- tokenize_lemma(df_list$presdebate_final)
+
+tidy_presdebate_final_w <- tokenize_lemma(df_list$presdebate_final_w)
+
+tidy_trans_first <- tokenize_lemma_speaker(df_list$trans_first, "Chris Wallace")
+
+tidy_trans_final <- tokenize_lemma_speaker(df_list$trans_final, "Kristen Walker")
+```
+
+## Visualizing frequently used words by speaker in first and final debate
+
+
+```{r}
+theme_set(
+  theme_minimal() + 
+    theme(legend.position = "right")
+)
+
+tidy_trans_first %>% 
+  group_by(speaker) %>% 
+  count(word, sort = TRUE) %>%
+  filter(n < 30 & n > 10) %>%
+  mutate(word = reorder(word, n)) %>% 
+  ggplot(aes(word, n, fill = speaker)) +
+  geom_col() +
+  scale_fill_manual(values = c("#FF6746", "#46B9FF", "#68D21E")) +
+  facet_wrap(~speaker, ncol = 3, scales = "free") +
+  xlab(NULL) +
+  coord_flip()
+
+tidy_trans_final %>% 
+  group_by(speaker) %>% 
+  count(word, sort = TRUE) %>%
+  filter(n < 30 & n > 10) %>%
+  mutate(word = reorder(word, n)) %>% 
+  ggplot(aes(word, n, fill = speaker)) +
+  geom_col() +
+  scale_fill_manual(values = c("#FF6746", "#46B9FF", "#68D21E")) +
+  facet_wrap(~speaker, ncol = 3, scales = "free") +
+  xlab(NULL) +
+  coord_flip()
+```
+```{r}
+
+sent_nrc <- function(df) {
+  df %>% 
+    left_join(get_sentiments("nrc"), by = c("word_lemma" = "word")) %>% 
+      filter(sentiment != "NA") %>% 
+      count(speaker, time, word, word_lemma, sentiment) %>% 
+      spread(sentiment, n, fill = 0) %>% 
+      mutate(sentiment = positive - negative)
+}
+
+first_sentiment <- sent_nrc(tidy_trans_first)
+
+final_sentiment <- sent_nrc(tidy_trans_final) 
+
+first_sentiment$time <- as.Date(first_sentiment$time)
+first_sentiment$time <- format(as.POSIXct(first_sentiment$time), format = "%H:%M:%S")
+final_sentiment$date <- as.Date(final_sentiment$time)
+final_sentiment$time <- as.POSIXct(strptime(final_sentiment$time, "%H:%M:%S"))
+
+
+
+first_sentiment %>% 
+  ggplot(aes(time, sentiment, fill = speaker)) +
+  geom_col() +
+  facet_wrap(~speaker, ncol = 1, scales = "free")
+
+final_sentiment %>% 
+  ggplot(aes(time, sentiment, fill = speaker)) +
+  geom_col() + 
+  scale_x_time(breaks = "2 min") +
+  facet_wrap(~speaker, ncol = 1, scales = "free")
+
+
+```
+

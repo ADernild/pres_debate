@@ -1,4 +1,5 @@
 library(tidyverse)
+library(data.table)
 
 # Cleaning function found on stackoverflow
 clean_tweets <- function(x) {
@@ -16,6 +17,7 @@ clean_tweets <- function(x) {
 
 # Cleaning tweets programmatically
 ref <- read.csv('twitter_data.csv', stringsAsFactors = FALSE) # .csv file containing path and altpath
+ref_clean <- read.csv('twitter_data_clean.csv', stringsAsFactors = FALSE) # .csv file containing paths for cleaned data
 
 voi <- c('user_id', 'status_id', 'created_at',
          'text', 'hashtags', 'location',
@@ -23,15 +25,29 @@ voi <- c('user_id', 'status_id', 'created_at',
 
 # Looping through ref reading in datasets containing tweets and cleaning text variable
 for (row in 1:nrow(ref)) {
-  df <- readRDS(ref$path[row]) %>%
-<<<<<<< HEAD
-    select(all_of(voi)) %>% 
-    distinct(status_id, .keep_all = TRUE)
-=======
+  df <- readRDS(ref$path[row]) %>% 
     select(all_of(voi))
->>>>>>> b3f9832d95b346c8384bb07752189ca5bc557e32
   df$text <- clean_tweets(df$text)
   saveRDS(df, ref$altpath[row])
 }
 
+# Loading cleaned datasets as list of dataframes
+df_list <- lapply(ref$altpath, readRDS)
+names(df_list) <- ref$name
 
+# Combining cleaned datasets into four dataframes with regard to collection date
+presdebate_first <- rbindlist(df_list[1:9]) %>% 
+  distinct(status_id, .keep_all = TRUE) %>% 
+  saveRDS(ref_clean$path[1])
+presdebate_first_w <- rbindlist(df_list[10:18]) %>% 
+  distinct(status_id, .keep_all = TRUE) %>% 
+  saveRDS(ref_clean$path[2])
+
+presdebate_final <- rbindlist(df_list[19:30]) %>% 
+  distinct(status_id, .keep_all = TRUE) %>% 
+  saveRDS(ref_clean$path[3])
+presdebate_final_w <- rbindlist(df_list[31:42]) %>%
+  distinct(status_id, .keep_all = TRUE) %>% 
+  saveRDS(ref_clean$path[4])
+
+# 

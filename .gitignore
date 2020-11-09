@@ -1,6 +1,6 @@
 /data_backup
 /keys
-/data
+/data/tweets
 report.Rmd
 sentiment.R
 report.Rmd

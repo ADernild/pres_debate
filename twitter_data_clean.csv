@@ -1,7 +1,5 @@
 name,path,type
-presdebate_first,data/tweets/first/tweets_d.rds,rds
-presdebate_first_w,data/tweets/first/tweets_w.rds,rds
-presdebate_final,data/tweets/final/tweets_d.rds,rds
-presdebate_final_w,data/tweets/final/tweets_w.rds,rds
+presdebate_first,data/tweets/first.rds,rds
+presdebate_final,data/tweets/final.rds,rds
 trans_first,data/debate/transcript_first.csv,csv
 trans_final,data/debate/transcript_final.csv,csv
